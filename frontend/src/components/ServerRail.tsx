@@ -101,6 +101,24 @@ export const ServerRail: React.FC = () => {
         </span>
       </NavLink>
 
+      {/* Nav Link: Wallet Login */}
+      <NavLink
+        to="/login"
+        className={({ isActive }) =>
+          `w-12 h-12 rounded-[24px] hover:rounded-[16px] flex items-center justify-center transition-all duration-200 group relative ${
+            isActive
+              ? 'bg-[#5865F2] text-white rounded-[16px]'
+              : 'bg-[#313338] text-[#dbdee1] hover:bg-[#5865F2] hover:text-white'
+          }`
+        }
+        title="Connect Web3 Wallet"
+      >
+        <ShieldCheck className="w-5 h-5" />
+        <span className="absolute left-[80px] bg-[#111214] text-white text-xs font-semibold px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+          Connect Wallet (/login)
+        </span>
+      </NavLink>
+
       {/* Nav Link: Settings */}
       <NavLink
         to="/settings"
@@ -118,6 +136,7 @@ export const ServerRail: React.FC = () => {
           Keypairs & Settings (/settings)
         </span>
       </NavLink>
+
     </div>
   );
 };

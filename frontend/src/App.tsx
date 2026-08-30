@@ -10,6 +10,7 @@ import { InspectView } from './views/InspectView';
 import { SettingsView } from './views/SettingsView';
 import { ImportView } from './views/ImportView';
 import { ExportView } from './views/ExportView';
+import { WalletLoginView } from './views/WalletLoginView';
 import { MerkleTree } from './lib/merkle';
 import {
   getStoredChannels,
@@ -170,6 +171,7 @@ const MainLayout: React.FC = () => {
             />
           }
         />
+        <Route path="/login" element={<WalletLoginView />} />
         <Route path="/import" element={<ImportView />} />
         <Route path="/export" element={<ExportView />} />
         <Route path="*" element={<Navigate to="/chat?id=general" replace />} />

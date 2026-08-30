@@ -1,4 +1,5 @@
 import { createConfig, http } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 import { defineChain } from 'viem';
 import { sepolia, baseSepolia, arbitrumSepolia } from 'wagmi/chains';
 
@@ -20,6 +21,10 @@ export const anvil = defineChain({
 
 export const wagmiConfig = createConfig({
   chains: [anvil, sepolia, baseSepolia, arbitrumSepolia],
+  connectors: [
+    injected({ target: 'metaMask' }),
+    injected(),
+  ],
   transports: {
     [anvil.id]: http('http://127.0.0.1:8545'),
     [sepolia.id]: http('https://rpc.sepolia.org'),
@@ -27,6 +32,7 @@ export const wagmiConfig = createConfig({
     [arbitrumSepolia.id]: http('https://sepolia-rollup.arbitrum.io/rpc'),
   },
 });
+
 
 export const CHRONOPROBE_ABI = [
   {
