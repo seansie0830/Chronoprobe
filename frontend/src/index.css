@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-[#313338] text-[#dbdee1] font-sans antialiased overflow-hidden select-none;
+  }
+}
+
+/* Custom Discord-styled scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2b2d31;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1b1e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #111214;
+}
