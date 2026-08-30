@@ -81,10 +81,11 @@ export function saveMessages(messages: ChatMessage[]) {
 export function getStoredContractAddress(): `0x${string}` {
   const raw = localStorage.getItem(CONTRACT_ADDRESS_KEY);
   if (raw && raw.startsWith('0x')) return raw as `0x${string}`;
-  // Default placeholder (will be replaced by local deploy or testnet address)
-  return '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  // Deployed Chronoprobe contract on local Anvil (31337)
+  return '0x32eF4AE9653C52Dd16DC9e5A34F956007C6A5f61';
 }
 
 export function saveContractAddress(address: `0x${string}`) {
   localStorage.setItem(CONTRACT_ADDRESS_KEY, address);
 }
+
