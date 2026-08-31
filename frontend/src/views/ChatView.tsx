@@ -16,17 +16,14 @@ interface ChatViewProps {
   personas: Persona[];
   activePersonaId: string;
   onRefreshBatch: () => void;
-  isSidebarOpen?: boolean;
-  onToggleSidebar?: () => void;
 }
 
 export const ChatView: React.FC<ChatViewProps> = ({
   personas,
   activePersonaId,
   onRefreshBatch,
-  isSidebarOpen,
-  onToggleSidebar,
 }) => {
+
 
   const [searchParams] = useSearchParams();
   const channelId = searchParams.get('id') || 'general';
@@ -134,11 +131,10 @@ export const ChatView: React.FC<ChatViewProps> = ({
       <Header
         channelName={activeChannel.name}
         channelTopic={activeChannel.topic}
-        isSidebarOpen={isSidebarOpen}
-        onToggleSidebar={onToggleSidebar}
       />
 
       {/* Message List */}
+
 
       <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {channelMessages.length === 0 ? (

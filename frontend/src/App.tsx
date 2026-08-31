@@ -158,11 +158,10 @@ const MainLayout: React.FC = () => {
                 personas={personas}
                 activePersonaId={activePersonaId}
                 onRefreshBatch={() => setRefreshTrigger((prev) => prev + 1)}
-                isSidebarOpen={isSidebarOpen}
-                onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
               />
             }
           />
+
           <Route path="/inspect" element={<InspectView />} />
           <Route
             path="/settings"
