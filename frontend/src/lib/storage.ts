@@ -89,3 +89,32 @@ export function saveContractAddress(address: `0x${string}`) {
   localStorage.setItem(CONTRACT_ADDRESS_KEY, address);
 }
 
+const EXPLORER_URL_KEY = 'chronoprobe_explorer_url';
+export const DEFAULT_EXPLORER_URL = 'http://localhost:5173'; // Default Ottoscan / localnet explorer base URL
+
+export function getStoredExplorerUrl(): string {
+  const raw = localStorage.getItem(EXPLORER_URL_KEY);
+  if (raw) return raw;
+  return DEFAULT_EXPLORER_URL;
+}
+
+export function saveExplorerUrl(url: string) {
+  localStorage.setItem(EXPLORER_URL_KEY, url);
+}
+
+export function getExplorerTxUrl(txHash: string): string {
+  const base = getStoredExplorerUrl().replace(/\/+$/, '');
+  return `${base}/tx/${txHash}`;
+}
+
+export function getExplorerBlockUrl(blockNumber: number | string): string {
+  const base = getStoredExplorerUrl().replace(/\/+$/, '');
+  return `${base}/block/${blockNumber}`;
+}
+
+export function getExplorerAddressUrl(address: string): string {
+  const base = getStoredExplorerUrl().replace(/\/+$/, '');
+  return `${base}/address/${address}`;
+}
+
+
