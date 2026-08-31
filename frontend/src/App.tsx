@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from
 import { WagmiProvider, usePublicClient, useWalletClient } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig, CHRONOPROBE_ABI } from './config/wagmi';
-import { ServerRail } from './components/ServerRail';
 import { Sidebar } from './components/Sidebar';
 import { ChatView } from './views/ChatView';
+
 import { InspectView } from './views/InspectView';
 import { SettingsView } from './views/SettingsView';
 import { ImportView } from './views/ImportView';
@@ -31,6 +31,7 @@ const MainLayout: React.FC = () => {
   const [activePersonaId, setActivePersonaIdState] = useState<string>('');
   const [isAnchoring, setIsAnchoring] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -130,11 +131,8 @@ const MainLayout: React.FC = () => {
   const activeChannelId = searchParams.get('id') || 'general';
 
   return (
-    <div className="flex h-screen w-screen bg-[#1e1f22] overflow-hidden text-[#dbdee1]">
-      {/* 1. Leftmost Server / Nav Rail */}
-      <ServerRail />
-
-      {/* 2. Secondary Sidebar (Channels & Personas) */}
+    <div className="flex h-screen w-screen bg-[#090d16] overflow-hidden text-slate-200">
+      {/* Unified Single Collapsible Sidebar */}
       <Sidebar
         channels={channels}
         activeChannelId={activeChannelId}
@@ -145,40 +143,48 @@ const MainLayout: React.FC = () => {
         pendingCount={pendingMessages.length}
         onAnchorBatch={handleAnchorBatch}
         isAnchoring={isAnchoring}
+        isCollapsed={!isSidebarOpen}
+        onToggleCollapse={() => setIsSidebarOpen((prev) => !prev)}
       />
 
-      {/* 3. Main View Area */}
-      <Routes>
-        <Route path="/" element={<Navigate to="/chat?id=general" replace />} />
-        <Route
-          path="/chat"
-          element={
-            <ChatView
-              personas={personas}
-              activePersonaId={activePersonaId}
-              onRefreshBatch={() => setRefreshTrigger((prev) => prev + 1)}
-            />
-          }
-        />
-        <Route path="/inspect" element={<InspectView />} />
-        <Route
-          path="/settings"
-          element={
-            <SettingsView
-              personas={personas}
-              activePersonaId={activePersonaId}
-              onUpdatePersonas={handleUpdatePersonas}
-            />
-          }
-        />
-        <Route path="/login" element={<WalletLoginView />} />
-        <Route path="/import" element={<ImportView />} />
-        <Route path="/export" element={<ExportView />} />
-        <Route path="*" element={<Navigate to="/chat?id=general" replace />} />
-      </Routes>
+      {/* Main View Area */}
+      <div className="flex-1 flex min-w-0 h-full overflow-hidden">
+        <Routes>
+          <Route path="/" element={<Navigate to="/chat?id=general" replace />} />
+          <Route
+            path="/chat"
+            element={
+              <ChatView
+                personas={personas}
+                activePersonaId={activePersonaId}
+                onRefreshBatch={() => setRefreshTrigger((prev) => prev + 1)}
+                isSidebarOpen={isSidebarOpen}
+                onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+              />
+            }
+          />
+          <Route path="/inspect" element={<InspectView />} />
+          <Route
+            path="/settings"
+            element={
+              <SettingsView
+                personas={personas}
+                activePersonaId={activePersonaId}
+                onUpdatePersonas={handleUpdatePersonas}
+              />
+            }
+          />
+          <Route path="/login" element={<WalletLoginView />} />
+          <Route path="/import" element={<ImportView />} />
+          <Route path="/export" element={<ExportView />} />
+          <Route path="*" element={<Navigate to="/chat?id=general" replace />} />
+        </Routes>
+      </div>
     </div>
   );
+
 };
+
 
 export function App() {
   return (

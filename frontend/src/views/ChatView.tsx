@@ -16,13 +16,18 @@ interface ChatViewProps {
   personas: Persona[];
   activePersonaId: string;
   onRefreshBatch: () => void;
+  isSidebarOpen?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export const ChatView: React.FC<ChatViewProps> = ({
   personas,
   activePersonaId,
   onRefreshBatch,
+  isSidebarOpen,
+  onToggleSidebar,
 }) => {
+
   const [searchParams] = useSearchParams();
   const channelId = searchParams.get('id') || 'general';
 
@@ -125,22 +130,27 @@ export const ChatView: React.FC<ChatViewProps> = ({
   const channelMessages = messages.filter((m) => m.channelId === channelId);
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#313338] min-w-0">
+    <div className="flex-1 flex flex-col h-full bg-[#0b0f19] min-w-0">
       <Header
         channelName={activeChannel.name}
         channelTopic={activeChannel.topic}
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={onToggleSidebar}
       />
 
       {/* Message List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+
+      <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {channelMessages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-8 text-[#949ba4]">
-            <Sparkles className="w-12 h-12 text-[#5865F2] mb-3 opacity-80" />
-            <h3 className="text-white font-bold text-lg mb-1">
-              Welcome to #{activeChannel.name}!
+          <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-500">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="text-slate-100 font-semibold text-sm mb-1">
+              Welcome to #{activeChannel.name}
             </h3>
-            <p className="text-xs max-w-sm">
-              This is the start of the #{activeChannel.name} channel. Every message sent here is cryptographically endorsed with a fresh blockhash and anchored into on-chain Merkle trees.
+            <p className="text-xs max-w-sm text-slate-400 leading-relaxed">
+              This channel features cryptographically certified message timestamps. Each message is signed with a recent blockhash ($t &gt; B_{'{start}'}$) and batched into an on-chain Merkle root ($t &lt; B_{'{end}'}$).
             </p>
           </div>
         ) : (
@@ -152,39 +162,39 @@ export const ChatView: React.FC<ChatViewProps> = ({
             return (
               <div
                 key={msg.id}
-                className={`flex gap-4 group hover:bg-[#2e3035]/60 -mx-4 px-4 py-1 rounded transition-colors ${
+                className={`flex gap-3.5 group hover:bg-[#131b2e]/40 -mx-4 px-4 py-1.5 rounded-lg transition-colors ${
                   isFirstInGroup ? 'mt-3 pt-2' : 'mt-0.5'
                 }`}
               >
                 {isFirstInGroup ? (
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold text-white shrink-0 mt-0.5 select-none"
-                    style={{ backgroundColor: authorPersona?.color || '#5865F2' }}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5 select-none shadow-sm"
+                    style={{ backgroundColor: authorPersona?.color || '#4f46e5' }}
                   >
                     {authorPersona?.avatar || '👤'}
                   </div>
                 ) : (
-                  <div className="w-10 text-[10px] text-[#949ba4] text-right opacity-0 group-hover:opacity-100 select-none pt-1">
+                  <div className="w-8 text-[10px] text-slate-500 text-right opacity-0 group-hover:opacity-100 select-none pt-1 font-mono">
                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 )}
 
                 <div className="flex-1 min-w-0">
                   {isFirstInGroup && (
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-white text-sm">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="font-semibold text-slate-100 text-xs">
                         {msg.authorName}
                       </span>
-                      <span className="text-[10px] text-[#949ba4]">
+                      <span className="text-[10px] text-slate-500 font-mono">
                         {new Date(msg.timestamp).toLocaleTimeString()}
                       </span>
-                      <span className="text-[10px] text-[#80848e] font-mono">
+                      <span className="text-[10px] text-slate-500 font-mono">
                         ({msg.authorAddress.substring(0, 6)}...{msg.authorAddress.substring(38)})
                       </span>
                     </div>
                   )}
 
-                  <div className="text-sm text-[#dbdee1] leading-relaxed break-words">
+                  <div className="text-xs text-slate-200 leading-relaxed break-words font-sans">
                     {msg.content}
                   </div>
 
@@ -198,38 +208,40 @@ export const ChatView: React.FC<ChatViewProps> = ({
       </div>
 
       {/* Message Input Box */}
-      <div className="p-4 bg-[#313338]">
+      <div className="p-4 bg-[#0f172a] border-t border-[#1e293b]">
         <form
           onSubmit={handleSendMessage}
-          className="bg-[#383a40] rounded-lg px-4 py-2.5 flex items-center gap-3 border border-transparent focus-within:border-[#5865F2] transition-colors"
+          className="bg-[#1e293b] rounded-lg px-4 py-2.5 flex items-center gap-3 border border-[#334155] focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all shadow-sm"
         >
           <input
             type="text"
             value={inputContent}
             onChange={(e) => setInputContent(e.target.value)}
             placeholder={`Message #${activeChannel.name} as ${activePersona?.name || 'User'} (auto-signs with Block #${simulatedBlock.number})`}
-            className="bg-transparent flex-1 text-sm text-white placeholder-[#80848e] focus:outline-none"
+            className="bg-transparent flex-1 text-xs text-slate-100 placeholder-slate-400 focus:outline-none"
           />
           <button
             type="submit"
             disabled={!inputContent.trim() || isSending}
-            className={`p-1.5 rounded-full transition-all ${
+            className={`p-1.5 rounded-md transition-all ${
               inputContent.trim() && !isSending
-                ? 'bg-[#5865F2] text-white hover:bg-[#4752C4] cursor-pointer'
-                : 'text-[#80848e] cursor-not-allowed'
+                ? 'bg-indigo-600 text-white hover:bg-indigo-500 cursor-pointer shadow-sm'
+                : 'text-slate-500 cursor-not-allowed'
             }`}
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3.5 h-3.5" />
           </button>
         </form>
-        <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-[#949ba4]">
-          <span className="flex items-center gap-1 font-mono">
-            <span>Current Anchor Ref:</span>
-            <span className="text-[#23a55a] font-bold">Block #{simulatedBlock.number}</span>
+        <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-slate-400 font-mono">
+          <span className="flex items-center gap-1.5">
+            <span>Reference Anchor:</span>
+            <span className="text-emerald-400 font-medium">Block #{simulatedBlock.number}</span>
           </span>
-          <span>Press Enter to send & sign assertion</span>
+          <span>Press Enter to send & sign</span>
         </div>
       </div>
     </div>
   );
 };
+
+
