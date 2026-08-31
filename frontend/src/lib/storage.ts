@@ -90,7 +90,8 @@ export function saveContractAddress(address: `0x${string}`) {
 }
 
 const EXPLORER_URL_KEY = 'chronoprobe_explorer_url';
-export const DEFAULT_EXPLORER_URL = 'http://localhost:5173'; // Default Ottoscan / localnet explorer base URL
+export const DEFAULT_EXPLORER_URL = 'http://localhost:5100'; // Default Ottoscan / localnet explorer base URL
+
 
 export function getStoredExplorerUrl(): string {
   const raw = localStorage.getItem(EXPLORER_URL_KEY);
