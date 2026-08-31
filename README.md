@@ -1,6 +1,12 @@
 # ⏱️ Chronoprobe — Cryptographic Time-Interval Proofing System (PoC)
 
-Chronoprobe is a decentralized, verifiable time-interval proofing system built with **Foundry**, **Vite + React**, **Wagmi / Viem**, and styled as a modern **Discord Web3 Chat Application**.
+> [!IMPORTANT]
+> 🚧 **Active Development / Proof of Concept Notice**
+> 
+> This project is currently an **active research proof-of-concept (PoC) and under heavy development**. Smart contracts, cryptographic schemas, and frontend interfaces are subject to ongoing improvements, optimizations, and security hardening. Not intended for production financial use without external audit.
+
+Chronoprobe is a decentralized, verifiable time-interval proofing system built with **Foundry**, **Vite + React**, **Wagmi / Viem**, featuring a modern **collapsible SaaS dashboard**.
+
 
 ---
 
